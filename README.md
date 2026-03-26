@@ -1,6 +1,6 @@
 # Central Air Data Computer F-14 Tomcat
 
-Me encanta la aviacion, sobretodo las aeronaves tambien llamadas Aircraft, pero en particular, mi favorito para siempre y por siempre sera el F-14 Tomcar, y recientemente vi la historia de la creacion de su computadora digital y como actualmente mucha documentacion de como se realizo es abierta, lo que me permite replicar el sistema del aeronave de forma bastante simplificada y obteniendo simulación educativa del **Central Air Data Computer (CADC)** del F-14 Tomcat.
+Me encanta la aviacion, sobretodo las aeronaves tambien llamadas Aircraft, pero en particular, mi favorito para siempre y por siempre sera el F-14 Tomcat, y recientemente vi la historia de la creacion de su computadora digital y como actualmente mucha documentacion de como se realizo es abierta, lo que me permite replicar el sistema del aeronave de forma bastante simplificada y obteniendo simulación educativa del **Central Air Data Computer (CADC)** del F-14 Tomcat.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/F-14_Tomcat_DF-SD-06-03497.jpg/1920px-F-14_Tomcat_DF-SD-06-03497.jpg" alt="F-14 Tomcat" width="800"/>
 
