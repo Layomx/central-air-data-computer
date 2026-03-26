@@ -1,0 +1,14 @@
+# Binarios compilados
+cadc_f14
+tests/test_atmosphere
+tests/test_sensors
+tests/test_airdata
+tests/test_cadc
+tests/test_logger
+
+# Objetos
+*.o
+
+# Telemetría generada en runtime
+output/*.csv
+!output/.gitkeep
