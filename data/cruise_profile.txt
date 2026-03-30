@@ -1,0 +1,56 @@
+Perfil de vuelo de referencia — F-14 Tomcat
+Escenario: misión completa de crucero
+Duración aproximada: 1350 segundos (~22 minutos)
+
+Formato:
+time_s = tiempo desde despegue (s)
+alt_m  = altitud geométrica (m)
+mach   = número de Mach
+phase  = descripción de la fase
+
+Notas generales:
+Los valores son aproximaciones basadas en perfiles típicos del F-14 (NATOPS).
+El simulador interpola linealmente entre puntos, así que se pueden añadir más
+muestras si se quiere suavizar transiciones sin cambiar el comportamiento global.
+
+Fases consideradas:
+- Despegue y salida inicial
+- Ascenso
+- Crucero subsónico
+- Transición transónica
+- Crucero supersónico
+- Descenso y aproximación
+
+
+time_s    alt_m    mach    phase
+0         0        0.00    en tierra, previo al despegue
+30        500      0.30    rotación y ascenso inicial
+120       3000     0.50    ascenso sostenido
+300       7000     0.72    fin del ascenso, inicio de aceleración
+500       9500     0.85    crucero subsónico estable
+650       10500    1.05    cruce transónico (cerca de Mach 1)
+800       12000    1.40    crucero supersónico
+1000      8000     0.90    inicio del descenso
+1200      1500     0.40    aproximación final
+1350      0        0.20    toma de contacto y rodaje
+
+
+Algunos valores de referencia útiles para validar el modelo:
+
+En t = 500 s (crucero subsónico):
+Altitud ~9500 m (31168 ft)
+TAS ~498 kt
+CAS ~317 kt
+Temperatura ~219 K (-54 °C)
+Flecha alar ~39°
+
+En t = 800 s (crucero supersónico):
+Altitud ~12000 m (39370 ft)
+TAS ~803 kt
+CAS ~465 kt
+Temperatura ~216.65 K (-56.5 °C, estratosfera)
+Flecha alar ~55°
+Presión dinámica q ~39613 Pa
+
+Referencia de aproximación típica del F-14:
+CAS ~135–150 kt con alas extendidas (~20°)

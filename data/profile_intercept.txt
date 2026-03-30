@@ -1,0 +1,67 @@
+Perfil de intercepción — F-14 Tomcat
+Escenario: misión típica de intercepción de alta velocidad
+Duración aproximada: 1080 segundos (~18 minutos)
+
+Formato:
+time_s = tiempo desde despegue (s)
+alt_m  = altitud geométrica (m)
+mach   = número de Mach
+phase  = descripción de la fase
+
+Contexto:
+El F-14 fue diseñado principalmente para misiones de intercepción de largo alcance,
+especialmente contra bombarderos soviéticos como el Tu-22M y el Tu-95. Este tipo de
+perfil prioriza alcanzar altitud y velocidad lo más rápido posible, normalmente con
+postcombustión activa durante buena parte del ascenso.
+
+Este escenario representa una salida “full power”: ascenso agresivo, transición
+rápida a régimen supersónico, pico cercano al límite estructural (Mach 2.34),
+intercepción y posterior regreso para recuperación en portaaviones.
+
+Fases consideradas:
+- Lanzamiento por catapulta y salida inicial
+- Ascenso con aceleración transónica
+- Régimen supersónico sostenido
+- Punto de intercepción (TOI)
+- Descenso y recuperación
+
+
+time_s    alt_m    mach    phase
+0         0        0.00    en cubierta, listo para catapulta
+20        300      0.35    lanzamiento y ascenso inicial
+90        4000     0.70    ascenso agresivo con postcombustión
+180       9000     1.00    cruce de Mach 1
+250       12000    1.60    aceleración supersónica
+350       15000    2.10    régimen supersónico alto
+500       16000    2.34    velocidad máxima, punto de intercepción
+650       14000    1.80    salida de combate, reducción de velocidad
+800       8000     0.90    descenso sostenido
+1000      1000     0.35    aproximación a portaaviones
+1080      0        0.20    toma en cubierta
+
+
+Valores de referencia útiles para validar el modelo:
+
+En t = 180 s (Mach ~1.0):
+Altitud ~9000 m (29527 ft)
+TAS ~590 kt
+CAS ~394 kt
+Barrido alar ~50° (entrada en régimen supersónico)
+
+En t = 500 s (Mach ~2.34, límite):
+Altitud ~16000 m (52493 ft)
+TAS ~1342 kt (~2485 km/h)
+CAS ~585 kt
+Temperatura ~216.65 K (-56.5 °C)
+Barrido alar ~68° (máximo)
+Condición cercana a límite estructural (overspeed Mach)
+
+Notas operativas:
+Mach 2.34 corresponde al límite estructural documentado del F-14. Alcanzar este
+régimen requiere postcombustión completa (afterburner) y el consumo de combustible
+se incrementa de forma significativa, por lo que el tiempo en esta condición es
+necesariamente corto.
+
+Durante este perfil, el sistema de alas de geometría variable alcanza su máximo
+barrido (~68°) cerca del punto de intercepción. En el descenso, el barrido se reduce
+progresivamente hasta valores cercanos a 20° para la fase de aproximación y aterrizaje.

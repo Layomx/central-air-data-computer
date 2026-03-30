@@ -1,0 +1,86 @@
+Tabla de referencia ISA — Atmósfera Estándar Internacional
+
+Datos basados en la U.S. Standard Atmosphere 1976 (NOAA/NASA/USAF).
+Se usan como referencia para validar la implementación de atmosphere.c.
+
+La idea es comparar directamente los resultados de atmosphere_calculate()
+contra estos valores y verificar que los errores se mantengan dentro de
+los márgenes esperados.
+
+Unidades:
+Alt_m  = altitud geométrica (m)
+Alt_ft = altitud en pies (ft)
+T_K    = temperatura (K)
+T_C    = temperatura (°C)
+P_Pa   = presión estática (Pa)
+rho    = densidad (kg/m³)
+a_ms   = velocidad del sonido (m/s)
+a_kt   = velocidad del sonido (kt)
+
+Capas:
+TROPO = troposfera (0 – 11 km)
+STRAT = estratosfera baja (11 – 20 km)
+
+
+Alt_m   Alt_ft   T_K      T_C      P_Pa       rho       a_ms    a_kt    capa
+0       0        288.15   15.00    101325.0   1.2250    340.29  661.5   TROPO
+500     1640     284.90   11.75    95460.9    1.1673    338.37  657.8   TROPO
+1000    3281     281.65   8.50     89874.6    1.1117    336.43  654.0   TROPO
+1500    4921     278.40   5.25     84559.4    1.0581    334.49  650.2   TROPO
+2000    6562     275.15   2.00     79495.5    1.0065    332.53  646.4   TROPO
+2500    8202     271.90   -1.25    74682.3    0.9569    330.56  642.5   TROPO
+3000    9843     268.66   -4.49    70108.5    0.9093    328.58  638.6   TROPO
+3500    11483    265.41   -7.74    65764.2    0.8634    326.58  634.7   TROPO
+4000    13123    262.17   -10.98   61640.8    0.8194    324.58  630.8   TROPO
+4500    14764    258.92   -14.23   57728.1    0.7770    322.56  626.9   TROPO
+5000    16404    255.68   -17.47   54020.5    0.7364    320.53  623.0   TROPO
+5500    18045    252.43   -20.72   50506.8    0.6975    318.49  619.0   TROPO
+6000    19685    249.19   -23.96   47181.0    0.6601    316.43  615.0   TROPO
+6500    21326    245.94   -27.21   44034.2    0.6243    314.36  611.0   TROPO
+7000    22966    242.70   -30.45   41060.7    0.5900    312.28  607.0   TROPO
+7500    24606    239.46   -33.69   38253.6    0.5572    310.18  603.0   TROPO
+8000    26247    236.22   -36.93   35606.2    0.5258    308.07  598.9   TROPO
+8500    27887    232.97   -40.18   33112.5    0.4956    305.95  594.8   TROPO
+9000    29528    229.73   -43.42   30766.6    0.4669    303.81  590.6   TROPO
+9144    30000    228.71   -44.44   30090.2    0.4601    303.04  589.1   TROPO
+9500    31168    226.49   -46.66   28563.2    0.4393    301.65  586.4   TROPO
+10000   32808    223.25   -49.90   26436.9    0.4127    299.47  582.2   TROPO
+10500   34449    220.01   -53.14   24435.9    0.3872    297.27  577.9   TROPO
+11000   36089    216.65   -56.50   22632.1    0.3639    295.07  573.6   TROPO/STRAT
+11500   37730    216.65   -56.50   20916.4    0.3363    295.07  573.6   STRAT
+12000   39370    216.65   -56.50   19330.5    0.3108    295.07  573.6   STRAT
+12192   40000    216.65   -56.50   18754.0    0.3016    295.07  573.6   STRAT
+13000   42651    216.65   -56.50   16510.4    0.2655    295.07  573.6   STRAT
+14000   45932    216.65   -56.50   14101.8    0.2268    295.07  573.6   STRAT
+15000   49213    216.65   -56.50   12044.7    0.1937    295.07  573.6   STRAT
+15240   50000    216.65   -56.50   11597.4    0.1865    295.07  573.6   STRAT
+16000   52493    216.65   -56.50   10287.5    0.1654    295.07  573.6   STRAT
+17000   55774    216.65   -56.50   8786.7     0.1413    295.07  573.6   STRAT
+18000   59055    216.65   -56.50   7504.8     0.1207    295.07  573.6   STRAT
+18288   60000    216.65   -56.50   7171.8     0.1153    295.07  573.6   STRAT
+19000   62336    216.65   -56.50   6410.0     0.1031    295.07  573.6   STRAT
+20000   65617    216.65   -56.50   5475.0     0.0880    295.07  573.6   STRAT
+
+
+Altitudes de referencia típicas en operación del F-14:
+
+0 ft      nivel del mar, operaciones en cubierta o base aérea
+500 m     (~1640 ft), patrón de tráfico
+30000 ft  (~9144 m), crucero subsónico típico
+12000 m   (~39370 ft), crucero supersónico (≈ Mach 1.4)
+50000 ft  (~15240 m), perfil de intercepción
+60000 ft  (~18288 m), techo operativo aproximado
+
+
+Notas de validación:
+
+Los resultados de atmosphere_calculate() deberían coincidir con estos valores
+dentro de ±0.1% en temperatura y ±0.2% en presión a lo largo de toda la tabla.
+
+Si el error crece con la altitud, normalmente indica:
+- problema en el gradiente térmico (lapse rate)
+- error acumulativo en la ecuación barométrica
+- uso incorrecto de constantes (R, g, etc.)
+
+Este archivo funciona básicamente como “ground truth” para pruebas unitarias
+y validación del modelo ISA.
