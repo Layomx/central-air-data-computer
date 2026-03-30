@@ -1,6 +1,6 @@
 # Implemented physics
 
-Language: English | [Espanol](fisica.es.md)
+Language: English | [Español](fisica.es.md)
 
 All equations used by the project, with derivation context and physical interpretation.
 

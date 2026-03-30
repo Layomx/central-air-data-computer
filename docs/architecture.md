@@ -1,6 +1,6 @@
 # System architecture
 
-Language: English | [Espanol](arquitectura.es.md)
+Language: English | [Español](arquitectura.es.md)
 
 ## Overview
 
