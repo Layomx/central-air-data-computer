@@ -182,7 +182,7 @@ void cadc_print_panel(const CadcState *state)
     const AlertState   *al = &state->alerts;
 
     printf("\n");
-    printf("=== CADC STATUS ==================================================\n");
+    printf("CADC STATUS\n");
     printf("TIME: %8.2f s | CYCLE: %6d | DT: %.3f s\n",
            state->time_s, state->cycle_count, state->dt_s);
 
@@ -192,7 +192,7 @@ void cadc_print_panel(const CadcState *state)
     }
 
     // Airdata
-    printf("\n-- AIRDATA --------------------------------------------------------\n");
+    printf("\n-- AIRDATA --\n");
     printf("MACH: %5.3f (%s)\n",
            ad->mach,
            ad->supersonic ? "SUPERSONICO" : "SUBSONICO");
@@ -215,7 +215,7 @@ void cadc_print_panel(const CadcState *state)
            ad->density_ratio);
 
     // Wings
-    printf("\n-- WINGS ----------------------------------------------------------\n");
+    printf("\n-- WINGS --\n");
     printf("SWEEP: %6.2f deg | RATE: %+6.2f deg/s | MODE: %s\n",
            wg->sweep_deg,
            wg->sweep_rate_dps,
@@ -226,7 +226,7 @@ void cadc_print_panel(const CadcState *state)
            wg->at_max);
 
     // Alertas
-    printf("\n-- ALERTS ---------------------------------------------------------\n");
+    printf("\n-- ALERTS --\n");
 
     if (al->any_alert) {
         printf("ACTIVE: ");
@@ -242,7 +242,7 @@ void cadc_print_panel(const CadcState *state)
         printf("NONE\n");
     }
 
-    printf("==================================================================\n");
+    printf("\n");
 }
 
 void cadc_print_log_line(const CadcState *state)
