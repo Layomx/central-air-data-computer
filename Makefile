@@ -16,7 +16,7 @@ cadc_f14: $(SRCS) main.c
 	$(CC) $(CFLAGS) -I. \
 	    $(SRCS) main.c \
 	    -o cadc_f14 $(LDFLAGS)
-	@echo "✓ Compilado: cadc_f14"
+	@echo "Compilado: cadc_f14"
 
 # Target por defecto
 all: cadc_f14 test_atmosphere test_sensors test_airdata test_cadc test_logger
