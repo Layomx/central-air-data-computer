@@ -1,6 +1,6 @@
 # Arquitectura del sistema
 
-Idioma: Español | [English](arquitectura.md)
+Idioma: Español | [English](architecture.md)
 
 ## Vision general
 

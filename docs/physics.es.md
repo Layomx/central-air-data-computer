@@ -1,6 +1,6 @@
 # Fisica implementada
 
-Idioma: Español | [English](fisica.md)
+Idioma: Español | [English](physics.md)
 
 Todas las ecuaciones implementadas en el proyecto, con su derivacion y contexto fisico.
 

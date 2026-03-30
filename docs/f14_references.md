@@ -1,6 +1,6 @@
 # Technical reference - F-14 Tomcat and its CADC
 
-Language: English | [Español](f14_referencias.es.md)
+Language: English | [Español](f14_references.es.md)
 
 Historical and technical context for the system modeled in this project.
 
