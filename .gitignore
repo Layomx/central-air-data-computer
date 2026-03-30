@@ -1,10 +1,11 @@
 # Binarios compilados
 cadc_f14
-tests/test_atmosphere
-tests/test_sensors
-tests/test_airdata
-tests/test_cadc
-tests/test_logger
+tests/test_atmosphere.exe
+tests/test_sensors.exe
+tests/test_airdata.exe
+tests/test_cadc.exe
+tests/test_logger.exe
+*.exe
 
 # Objetos
 *.o
