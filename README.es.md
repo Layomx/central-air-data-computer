@@ -10,9 +10,9 @@ El proyecto replica la arquitectura funcional del CADC real: toma datos de senso
 
 ## Documentacion
 
-- Arquitectura: [Español](docs/arquitectura.es.md) | [English](docs/arquitectura.md)
-- Referencia tecnica F-14: [Español](docs/f14_referencias.es.md) | [English](docs/f14_referencias.md)
-- Fisica implementada: [Español](docs/fisica.es.md) | [English](docs/fisica.md)
+- Arquitectura: [Español](docs/architecture.es.md) | [English](docs/architecture.md)
+- Referencia tecnica F-14: [Español](docs/f14_references.es.md) | [English](docs/f14_references.md)
+- Fisica implementada: [Español](docs/physics.es.md) | [English](docs/physics.md)
 
 ---
 

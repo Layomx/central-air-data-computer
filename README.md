@@ -10,9 +10,9 @@ The project reproduces the functional CADC architecture: it takes simulated sens
 
 ## Documentation
 
-- Architecture: [English](docs/arquitectura.md) | [Español](docs/arquitectura.es.md)
-- F-14 technical reference: [English](docs/f14_referencias.md) | [Español](docs/f14_referencias.es.md)
-- Implemented physics: [English](docs/fisica.md) | [Español](docs/fisica.es.md)
+- Architecture: [English](docs/architecture.md) | [Español](docs/architecture.es.md)
+- F-14 technical reference: [English](docs/f14_references.md) | [Español](docs/f14_references.es.md)
+- Implemented physics: [English](docs/physics.md) | [Español](docs/physics.es.md)
 
 ---
 
