@@ -177,7 +177,7 @@ int logger_init(LoggerState *logger, const char *filename, LogLevel level)
     // Abrir archivo en modo escritura
     logger->csv_file = fopen(filename, "w");
     if (logger->csv_file == NULL) {
-        fprintf(stderr, "[LOGGER] ERROR: no se pudo abrir '%s'\n", filename);
+        fprintf(stderr, "Logger ERROR: no se pudo abrir '%s'\n", filename);
         return -1;
     }
 
@@ -186,7 +186,7 @@ int logger_init(LoggerState *logger, const char *filename, LogLevel level)
 
     logger->csv_open = 1;
 
-    printf("[LOGGER] Archivo CSV abierto: %s\n", filename);
+    printf("Logger: Archivo CSV abierto: %s\n", filename);
     return 0;
 }
 
@@ -201,7 +201,7 @@ void logger_close(LoggerState *logger)
         fclose(logger->csv_file);
         logger->csv_file = NULL;
         logger->csv_open = 0;
-        printf("[LOGGER] Archivo CSV cerrado: %s (%d filas)\n", logger->csv_filename, logger->csv_rows_written);
+        printf("Logger: Archivo CSV cerrado: %s (%d filas)\n", logger->csv_filename, logger->csv_rows_written);
     }
 
     // Imprimir resumen final
