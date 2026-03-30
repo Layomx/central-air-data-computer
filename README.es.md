@@ -1,6 +1,6 @@
 # Central Air Data Computer F-14 Tomcat
 
-Idioma: Espanol | [English](README.md)
+Idioma: Español | [English](README.md)
 
 Me encanta la aviacion, sobretodo las aeronaves tambien llamadas Aircraft, pero en particular, mi favorito para siempre y por siempre sera el F-14 Tomcat, y recientemente vi la historia de la creacion de su computadora digital y como actualmente mucha documentacion de como se realizo es abierta, lo que me permite replicar el sistema del aeronave de forma bastante simplificada y obteniendo simulacion educativa del **Central Air Data Computer (CADC)** del F-14 Tomcat.
 
@@ -10,9 +10,9 @@ El proyecto replica la arquitectura funcional del CADC real: toma datos de senso
 
 ## Documentacion
 
-- Arquitectura: [Espanol](docs/arquitectura.es.md) | [English](docs/arquitectura.md)
-- Referencia tecnica F-14: [Espanol](docs/f14_referencias.es.md) | [English](docs/f14_referencias.md)
-- Fisica implementada: [Espanol](docs/fisica.es.md) | [English](docs/fisica.md)
+- Arquitectura: [Español](docs/arquitectura.es.md) | [English](docs/arquitectura.md)
+- Referencia tecnica F-14: [Español](docs/f14_referencias.es.md) | [English](docs/f14_referencias.md)
+- Fisica implementada: [Español](docs/fisica.es.md) | [English](docs/fisica.md)
 
 ---
 

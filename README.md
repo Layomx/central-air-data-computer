@@ -1,6 +1,6 @@
 # Central Air Data Computer F-14 Tomcat
 
-Language: English | [Espanol](README.es.md)
+Language: English | [Español](README.es.md)
 
 I have always loved aviation, especially military aircraft, and the F-14 Tomcat has always been my all-time favorite. After learning more about the history of its digital air data computer and seeing how much technical documentation is now public, I built this project as an educational simulation of the **Central Air Data Computer (CADC)** used by the F-14.
 
@@ -10,9 +10,9 @@ The project reproduces the functional CADC architecture: it takes simulated sens
 
 ## Documentation
 
-- Architecture: [English](docs/arquitectura.md) | [Espanol](docs/arquitectura.es.md)
-- F-14 technical reference: [English](docs/f14_referencias.md) | [Espanol](docs/f14_referencias.es.md)
-- Implemented physics: [English](docs/fisica.md) | [Espanol](docs/fisica.es.md)
+- Architecture: [English](docs/arquitectura.md) | [Español](docs/arquitectura.es.md)
+- F-14 technical reference: [English](docs/f14_referencias.md) | [Español](docs/f14_referencias.es.md)
+- Implemented physics: [English](docs/fisica.md) | [Español](docs/fisica.es.md)
 
 ---
 
