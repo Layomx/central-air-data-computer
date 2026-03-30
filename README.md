@@ -1,42 +1,49 @@
 # Central Air Data Computer F-14 Tomcat
 
-Me encanta la aviacion, sobretodo las aeronaves tambien llamadas Aircraft, pero en particular, mi favorito para siempre y por siempre sera el F-14 Tomcat, y recientemente vi la historia de la creacion de su computadora digital y como actualmente mucha documentacion de como se realizo es abierta, lo que me permite replicar el sistema del aeronave de forma bastante simplificada y obteniendo simulación educativa del **Central Air Data Computer (CADC)** del F-14 Tomcat.
+Language: English | [Espanol](README.es.md)
+
+I have always loved aviation, especially military aircraft, and the F-14 Tomcat has always been my all-time favorite. After learning more about the history of its digital air data computer and seeing how much technical documentation is now public, I built this project as an educational simulation of the **Central Air Data Computer (CADC)** used by the F-14.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/F-14_Tomcat_DF-SD-06-03497.jpg/1920px-F-14_Tomcat_DF-SD-06-03497.jpg" alt="F-14 Tomcat" width="800"/>
 
+The project reproduces the functional CADC architecture: it takes simulated sensor inputs (pitot pressure, static pressure, and temperature), processes them with physics-based models, and produces aerodynamic parameters used by the cockpit instruments, flight control logic, and variable-sweep wing system.
 
-El proyecto replica la arquitectura funcional del CADC real: toma datos de sensores simulados (presión de pitot, presión estática, temperatura), procesa esos datos como lo haría el hardware original, y produce los parámetros aerodinámicos que alimentaban la cabina, el sistema de control de vuelo, y las alas de geometría variable del F-14.
+## Documentation
 
----
-
-## Contexto histórico
-
-El **F-14 Tomcat** (Grumman, 1970) fue el primer caza naval con alas de geometría variable controladas por computador. El CADC era el sistema que hacía posible esa automatización: recibía las mediciones de los sensores de presión y temperatura, calculaba el número de Mach en tiempo real, y enviaba esa información a los actuadores hidráulicos que movían las alas. El CADC ademas de eso, contaba con lo que se considera hoy en dia el primer microprocesador de la historia, por supuesto, esto era informacion clasificada en su momento. 
-
-El CADC real era un computador analógico-digital híbrido. Las ecuaciones matemáticas no se ejecutaban en software, sino que se implementaban en circuitos de amplificadores operacionales y potenciómetros programados físicamente. Este proyecto reimplementa esa misma lógica en C moderno, con precisión de punto flotante de 64 bits que supera la del hardware original, he cambiado personalmente "el enfoque" de como construi el CADC porque estaba utilizando francamente tecnologia moderna, en su momento, se utilizaban otros metodos que no utilice en mi codigo para calcular muchas de las variables y los parametros ya sea por complejidad, eficiencia u otros motivos documentados en codigo.
+- Architecture: [English](docs/arquitectura.md) | [Espanol](docs/arquitectura.es.md)
+- F-14 technical reference: [English](docs/f14_referencias.md) | [Espanol](docs/f14_referencias.es.md)
+- Implemented physics: [English](docs/fisica.md) | [Espanol](docs/fisica.es.md)
 
 ---
 
-## Qué calcula este proyecto
+## Historical context
 
-A partir de tres mediciones de sensor (`Pt`, `Ps`, `T`), el sistema produce:
+The **F-14 Tomcat** (Grumman, 1970) was one of the earliest naval fighters with computer-controlled variable geometry wings. The CADC made that automation possible: it received pressure and temperature measurements, computed Mach in real time, and sent that information to hydraulic systems that positioned the wings.
 
-| Parámetro | Descripción | Unidades |
-|-----------|-------------|----------|
-| **Mach** | Inversión de la ecuación de pitot / Rayleigh | adimensional |
+The original CADC was a hybrid analog-digital computer. Instead of running modern software, many equations were implemented with analog circuits, operational amplifiers, and physically programmed function components. This project reimplements the same core logic in modern C with 64-bit floating-point precision for educational use.
+
+---
+
+## What this project computes
+
+From three sensor values (`Pt`, `Ps`, `T`), the system computes:
+
+| Parameter | Description | Units |
+|-----------|-------------|-------|
+| **Mach** | Inversion of pitot / Rayleigh relation | dimensionless |
 | **TAS** | True Airspeed | kt / m/s |
 | **CAS** | Calibrated Airspeed | kt |
 | **EAS** | Equivalent Airspeed | kt |
-| **Altitud** | Altitud barométrica | ft / m |
-| **VSI** | Variación vertical | ft/min |
-| **Sweep** | Ángulo de barrido de alas | grados |
-| **Alertas** | Overspeed, altitud máxima, sensor inválido | flags |
+| **Altitude** | Barometric altitude | ft / m |
+| **VSI** | Vertical speed | ft/min |
+| **Sweep** | Wing sweep angle | deg |
+| **Alerts** | Overspeed, max altitude, invalid sensor | flags |
 
 ---
 
-## Compilación
+## Build
 
-Requiere solo `gcc` y `make`. No hay dependencias externas.
+Requires only `gcc` and `make`. No external dependencies.
 
 ```bash
 git clone https://github.com/tu-usuario/cadc-f14-simulation
@@ -52,9 +59,9 @@ gcc -std=c11 -Wall -Wextra -g -I. \
     -o cadc_f14 -lm
 ```
 
-**Plataformas probadas:** Linux (GCC 11+), macOS (Clang 14+), Windows (MinGW/GCC).
+**Tested platforms:** Linux (GCC 11+), macOS (Clang 14+), Windows (MinGW/GCC).
 
-En Windows, compilar con el flag adicional para UTF-8 en terminal:
+Windows build command:
 
 ```bash
 gcc -std=c11 -Wall -Wextra -I. \
@@ -65,109 +72,109 @@ gcc -std=c11 -Wall -Wextra -I. \
 
 ---
 
-## Uso
-
-```
-./cadc_f14 [opciones]
-```
-
-### Opciones
-
-| Opción | Descripción | Defecto |
-|--------|-------------|---------|
-| `--profile cruise` | Perfil de crucero completo (despegue → M1.4 → aterrizaje) | |
-| `--profile intercept` | Intercepción agresiva hasta M2.34 | |
-| `--profile custom` | Condición constante definida por `--alt` y `--mach` | |
-| `--alt <m>` | Altitud en metros para perfil custom | `0` |
-| `--mach <M>` | Mach para perfil custom | `0` |
-| `--noise` | Activar ruido gaussiano en sensores (σ_P=15 Pa, σ_T=0.5 K) | off |
-| `--seed <n>` | Semilla aleatoria para reproducibilidad | `42` |
-| `--dt <s>` | Paso de tiempo de simulación | `1.0` |
-| `--output <archivo>` | Ruta del archivo CSV de telemetría | `output/vuelo.csv` |
-| `--no-csv` | No generar archivo CSV | |
-| `--quiet` | Solo mostrar resumen final | |
-| `--panel` | Mostrar panel completo en puntos clave del vuelo | |
-| `--help` | Mostrar ayuda | |
-
-### Ejemplos
+## Usage
 
 ```bash
-# Crucero básico — genera output/vuelo.csv
+./cadc_f14 [options]
+```
+
+### Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--profile cruise` | Full cruise profile (takeoff -> M1.4 -> landing) | |
+| `--profile intercept` | Aggressive intercept profile up to M2.34 | |
+| `--profile custom` | Constant condition from `--alt` and `--mach` | |
+| `--alt <m>` | Altitude in meters for custom profile | `0` |
+| `--mach <M>` | Mach number for custom profile | `0` |
+| `--noise` | Enable Gaussian sensor noise (sigma_P=15 Pa, sigma_T=0.5 K) | off |
+| `--seed <n>` | Random seed for reproducibility | `42` |
+| `--dt <s>` | Simulation time step | `1.0` |
+| `--output <file>` | Output telemetry CSV path | `output/vuelo.csv` |
+| `--no-csv` | Do not write CSV output | |
+| `--quiet` | Show final summary only | |
+| `--panel` | Show full instrument panel at key points | |
+| `--help` | Show help | |
+
+### Examples
+
+```bash
+# Basic cruise run - generates output/vuelo.csv
 ./cadc_f14
 
-# Intercepción con ruido gaussiano, paso de 0.5s
+# Intercept with Gaussian noise, 0.5s step
 ./cadc_f14 --profile intercept --noise --dt 0.5
 
-# Condición fija de crucero típico del F-14
+# Fixed F-14 cruise condition
 ./cadc_f14 --profile custom --alt 9000 --mach 0.85
 
-# Panel de instrumentos completo en momentos clave
+# Full panel output at key moments
 ./cadc_f14 --panel --dt 2.0
 
-# Solo resumen estadístico, sin tabla de vuelo
-./cadc_f14 --quiet --output mi_vuelo.csv
+# Statistical summary only
+./cadc_f14 --quiet --output my_flight.csv
 
-# Semilla fija para resultados reproducibles
+# Fixed seed for reproducibility
 ./cadc_f14 --profile intercept --noise --seed 1234
 ```
 
 ---
 
-## Perfiles de vuelo
+## Flight profiles
 
-### Crucero (`--profile cruise`)
+### Cruise (`--profile cruise`)
 
-Simula un vuelo completo de 1400 segundos:
-
-```
-Fase              t[s]    Alt[m]    Mach
-─────────────────────────────────────────
-Despegue             0        0    0.00
-Ascenso inicial     30      500    0.30
-Ascenso             120    3000    0.50
-Crucero bajo        300    7000    0.72
-Crucero subsónico   500    9500    0.85
-Cruce del sonido    650   10500    1.05
-Crucero supersónico 800   12000    1.40
-Descenso           1000    8000    0.90
-Aproximación       1200    1500    0.40
-Aterrizaje         1350       0    0.20
-```
-
-### Intercepción (`--profile intercept`)
-
-Simula una misión de intercepción de 1080 segundos con Mach máximo 2.34:
+Simulates a full 1400-second mission:
 
 ```
-Fase              t[s]    Alt[m]    Mach
-─────────────────────────────────────────
-Despegue             0        0    0.00
-Ascenso rápido      90     4000    0.70
+Phase             t[s]    Alt[m]    Mach
+-----------------------------------------
+Takeoff              0        0    0.00
+Initial climb       30      500    0.30
+Climb              120     3000    0.50
+Low cruise         300     7000    0.72
+Subsonic cruise    500     9500    0.85
+Transonic cross    650    10500    1.05
+Supersonic cruise  800    12000    1.40
+Descent           1000     8000    0.90
+Approach          1200     1500    0.40
+Landing           1350        0    0.20
+```
+
+### Intercept (`--profile intercept`)
+
+Simulates a 1080-second intercept mission with max Mach 2.34:
+
+```
+Phase             t[s]    Alt[m]    Mach
+-----------------------------------------
+Takeoff              0        0    0.00
+Rapid climb         90     4000    0.70
 M=1.0              180     9000    1.00
-Aceleración        350    15000    2.10
-Mach máximo        500    16000    2.34  ← alas a 68°
-Post-combate       650    14000    1.80
-Descenso           800     8000    0.90
-Aterrizaje        1080        0    0.20
+Acceleration       350    15000    2.10
+Max Mach           500    16000    2.34  <- wings at 68 deg
+Post-combat        650    14000    1.80
+Descent            800     8000    0.90
+Landing           1080        0    0.20
 ```
 
 ### Custom (`--profile custom`)
 
-Condición estacionaria durante 60 segundos. Útil para verificar un punto de vuelo específico.
+Steady condition for 60 seconds. Useful for checking a specific flight point.
 
 ```bash
-# Crucero típico F-14 a 30,000 ft
+# Typical F-14 cruise at 30,000 ft
 ./cadc_f14 --profile custom --alt 9144 --mach 0.85
 
-# Nivel del mar a baja velocidad
+# Sea level, low speed
 ./cadc_f14 --profile custom --alt 0 --mach 0.3
 ```
 
 ---
 
-## Salida CSV
+## CSV output
 
-El archivo CSV contiene 28 columnas por ciclo de  y se puede analizar con Python:
+The CSV output contains 28 columns per cycle and can be analyzed with Python:
 
 ```
 time_s, mach, supersonic, altitude_ft, altitude_m,
@@ -184,84 +191,84 @@ pt_Pa, ps_Pa, sensor_temp_K, airdata_valid, cycle
 ## Tests
 
 ```bash
-# Ejecuta todos los test
+# Run all tests
 make tests
 
-# Test individuales
-./tests/test_atmosphere   
-./tests/test_sensors     
-./tests/test_airdata      
-./tests/test_cadc         
-./tests/test_logger       
+# Individual test binaries
+./tests/test_atmosphere
+./tests/test_sensors
+./tests/test_airdata
+./tests/test_cadc
+./tests/test_logger
 ```
 
-Cada test incluye verificación automática de invariantes físicos:
-- `EAS ≤ TAS` en todas las condiciones
-- `TAS = Mach × a` en todas las condiciones  
-- `sweep ∈ [20°, 68°]` en toda la envolvente
-- `CAS ≥ 0` siempre
+Each test includes automatic validation of physical invariants:
+- `EAS <= TAS` in all conditions
+- `TAS = Mach x a` in all conditions
+- `sweep in [20 deg, 68 deg]` across the full envelope
+- `CAS >= 0` always
 
 ---
 
-## Física implementada
+## Implemented physics
 
-### Modelo ISA (atmosphere.c)
+### ISA model (atmosphere.c)
 
-Atmósfera Estándar Internacional para 0–20,000 m:
-
-```
-Troposfera (0–11,000 m):
-  T(h) = 288.15 - 0.0065 × h
-  P(h) = 101325 × (T/288.15)^5.2561
-
-Estratosfera baja (11,000–20,000 m):
-  T    = 216.65 K (isotermal)
-  P(h) = 22632.1 × exp(-(h-11000)/6341.6)
-
-Densidad:  ρ = P / (R × T)
-Sonido:    a = sqrt(γ × R × T)
-```
-
-### Presión de pitot (sensors.c)
+International Standard Atmosphere for 0-20,000 m:
 
 ```
-Subsónico (M < 1):
-  Pt/Ps = (1 + 0.2 × M²)^3.5
+Troposphere (0-11,000 m):
+  T(h) = 288.15 - 0.0065 x h
+  P(h) = 101325 x (T/288.15)^5.2561
 
-Supersónico (M ≥ 1) — Ecuación de Rayleigh:
-  Pt/Ps = [(γ+1)²M²/(4γM²-2(γ-1))]^(γ/(γ-1)) × (1-γ+2γM²)/(γ+1)
+Lower stratosphere (11,000-20,000 m):
+  T    = 216.65 K (isothermal)
+  P(h) = 22632.1 x exp(-(h-11000)/6341.6)
+
+Density:  rho = P / (R x T)
+Sound:    a = sqrt(gamma x R x T)
 ```
 
-### Inversión de Mach (airdata.c)
+### Pitot pressure (sensors.c)
 
 ```
-Subsónico:   M = sqrt(5 × ((Pt/Ps)^(2/7) - 1))   [analítico]
-Supersónico: bisección de Rayleigh                 [numérico, ~20 iter]
+Subsonic (M < 1):
+  Pt/Ps = (1 + 0.2 x M^2)^3.5
+
+Supersonic (M >= 1) - Rayleigh equation:
+  Pt/Ps = [(gamma+1)^2 M^2/(4 gamma M^2 - 2(gamma-1))]^(gamma/(gamma-1)) x (1-gamma+2 gamma M^2)/(gamma+1)
 ```
 
-### Alas de geometría variable (cadc.c)
+### Mach inversion (airdata.c)
 
 ```
-M < 0.40          → sweep = 20°
-0.40 ≤ M < 0.80   → sweep = lerp(M, 0.40, 0.80, 20°, 35°)
-0.80 ≤ M < 1.00   → sweep = lerp(M, 0.80, 1.00, 35°, 50°)
-1.00 ≤ M ≤ 2.34   → sweep = lerp(M, 1.00, 2.34, 50°, 68°)
+Subsonic:   M = sqrt(5 x ((Pt/Ps)^(2/7) - 1))   [analytic]
+Supersonic: Rayleigh bisection                  [numeric, ~20 iters]
+```
+
+### Variable geometry wings (cadc.c)
+
+```
+M < 0.40          -> sweep = 20 deg
+0.40 <= M < 0.80  -> sweep = lerp(M, 0.40, 0.80, 20 deg, 35 deg)
+0.80 <= M < 1.00  -> sweep = lerp(M, 0.80, 1.00, 35 deg, 50 deg)
+1.00 <= M <= 2.34 -> sweep = lerp(M, 1.00, 2.34, 50 deg, 68 deg)
 ```
 
 ---
 
-## Extensiones futuras
+## Future extensions
 
-En el futuro, me gustaria añadir todas los aspectos tecnicos que ni utilice en el modelado debido a complejidad como tambien hacer metodos mas eficientes para ciertas funciones especificas del CADC. Una extension futura es el desarrollo de un panel grafico con la informacion a tiempo real, pasando de simular una computadora a quizas simular vuelo.
+Future work may include additional CADC behavior that was not modeled yet due to complexity, more efficient numerical methods for selected routines, and a real-time graphical cockpit panel that moves beyond pure console simulation.
 
 ---
 
-## Referencias
+## References
 
-- **NATOPS Flight Manual F-14A/B/D** — Grumman/US Navy (desclasificado)
-- **U.S. Standard Atmosphere 1976** — NOAA/NASA/USAF
-- *Introduction to Flight* — John D. Anderson (7ª ed.)
-- *Modern Compressible Flow* — John D. Anderson
-- *Avionics Navigation Systems* — Kayton & Fried (2ª ed.)
-- *Optimal State Estimation* — Dan Simon
-- Código fuente de referencia: módulo `FGAtmosphere` de FlightGear (GPL)
+- **NATOPS Flight Manual F-14A/B/D** - Grumman/US Navy (declassified)
+- **U.S. Standard Atmosphere 1976** - NOAA/NASA/USAF
+- *Introduction to Flight* - John D. Anderson (7th ed.)
+- *Modern Compressible Flow* - John D. Anderson
+- *Avionics Navigation Systems* - Kayton and Fried (2nd ed.)
+- *Optimal State Estimation* - Dan Simon
+- Reference source code: FlightGear `FGAtmosphere` module (GPL)
