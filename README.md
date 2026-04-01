@@ -46,8 +46,8 @@ From three sensor values (`Pt`, `Ps`, `T`), the system computes:
 Requires only `gcc` and `make`. No external dependencies.
 
 ```bash
-git clone https://github.com/tu-usuario/cadc-f14-simulation
-cd cadc-f14-simulation
+git clone https://github.com/Layomx/central-air-data-computer.git
+cd central-air-data-computer
 
 make
 
