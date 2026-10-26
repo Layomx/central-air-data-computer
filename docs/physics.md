@@ -1,8 +1,8 @@
 # Implemented physics
 
-Language: English | [Español](physics.es.md)
+Documentation language: English
 
-All equations used by the project, with derivation context and physical interpretation.
+Equations currently used by the project, with derivation context, implementation scope, and physical interpretation. These equations describe the simulator; they are not a complete reconstruction of the original CADC calibration hardware.
 
 ---
 
@@ -140,7 +140,7 @@ TAS = Mach * a(T)
 
 Example: M = 1.4, T = 216.65 K -> a = 295.07 m/s -> TAS = 413.1 m/s = 803 kt
 
-### Calibrated Airspeed (CAS)
+### Calibrated Airspeed (CAS) — current approximation
 
 CAS is instrument-equivalent speed referenced to sea-level ISA conditions. It uses impact pressure `qc = Pt - Ps` normalized by P0:
 
@@ -151,7 +151,7 @@ a0 = 340.294 m/s
 P0 = 101325 Pa
 ```
 
-At sea level, CAS approaches TAS. At altitude, it remains a sea-level calibrated representation of pressure effects.
+At sea level, this approximation approaches TAS. At altitude, it is a sea-level-referenced pressure-speed estimate. Its supersonic behavior is not claimed to reproduce the complete aircraft instrument calibration.
 
 ### Equivalent Airspeed (EAS)
 
@@ -163,11 +163,11 @@ EAS = TAS * sqrt(rho/rho0)
 rho0 = 1.225 kg/m^3
 ```
 
-Structural limits are often tied to EAS because aerodynamic forces scale with 0.5*rho*V^2.
+Structural loads are related to dynamic pressure, which in the incompressible approximation scales with `0.5*rho*V^2`. The current implementation computes EAS from density scaling, but its `dynamic_pressure_Pa` field currently stores `Pt - Ps` (impact pressure), not the incompressible formula. This distinction is scheduled for correction in the refactoring.
 
 ### Relationship among speeds
 
-In typical altitude conditions: **EAS <= CAS <= TAS**.
+In typical subsonic altitude conditions: **EAS <= CAS <= TAS**. This relationship is used as a diagnostic expectation, not as a universal validation rule for every compressible-flow regime.
 
 Near sea level: EAS ~= CAS ~= TAS.
 
@@ -246,9 +246,14 @@ Parameters used:
 
 **ISA inversion accuracy:** below 0.2 m over 0-20,000 m in ideal model conditions.
 
-**Mach inversion accuracy:** below 1e-6 over M = 0 to M = 2.34.
+**Mach inversion accuracy:** approximately 1e-6 in the ideal, bracketed model over the tested range M = 0 to M = 2.34.
 
 **Model limitations:**
 - Real atmosphere deviates from ISA due to weather, humidity, and regional pressure variation.
 - White Gaussian noise is statistically useful but does not model real temporal correlation or sensor thermal/mechanical dynamics.
 - Wing schedule is piecewise linear and does not include hysteresis logic found in real systems.
+- The profile driver is open-loop: wing sweep does not feed back into aircraft acceleration, altitude, or aerodynamic forces.
+
+## Source basis
+
+The standard-atmosphere constants and layer model are based on the public [U.S. Standard Atmosphere 1976 technical report](https://ntrs.nasa.gov/archive/nasa%20/casi.ntrs.nasa.gov/19770009539.pdf). The project uses only a limited 0–20 km subset and geometric-altitude simplifications. The pitot relations are standard compressible-flow equations; aircraft-specific calibration and CADC implementation details are not fully established in this repository and must be treated as assumptions unless a variant-specific source is cited.

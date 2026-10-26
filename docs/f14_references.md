@@ -1,8 +1,8 @@
 # Technical reference - F-14 Tomcat and its CADC
 
-Language: English | [Español](f14_references.es.md)
+Documentation language: English
 
-Historical and technical context for the system modeled in this project.
+Historical and technical context for the system modeled in this project. Each statement should be read as either a cited fact, an engineering assumption, or an implementation approximation; those categories are not interchangeable.
 
 <img src="https://www.airdatanews.com/wp-content/uploads/2020/12/f-14-vf-211.jpg" alt="F-14 Tomcat" width="800"/>
 
@@ -22,7 +22,7 @@ The **Grumman F-14 Tomcat** served as the U.S. Navy air-superiority fighter from
 | Propulsion | 2x Pratt and Whitney TF30 (F-14A) / GE F110 (F-14D) |
 | Crew | Pilot + Radar Intercept Officer (RIO) |
 
-What made the F-14 stand out was its **variable-sweep wing** system, one of the first computer-controlled variable sweep implementations on an operational fighter.
+The F-14 is documented as a variable-sweep aircraft. The exact historical priority claim (“one of the first”) is not needed by the simulator and is intentionally not used as a technical requirement.
 
 ---
 
@@ -40,25 +40,24 @@ The F-14 wings sweep from **20 deg to 68 deg** in flight (75 deg for carrier dec
 
 ## CADC: Central Air Data Computer
 
-### Hardware history
+### Hardware history and evidence boundary
 
-The original F-14A CADC was a **hybrid analog-digital** system manufactured by Lear Siegler. Unlike modern ADC computers that run software on digital processors, many CADC equations were physically realized in hardware:
+Public descriptions identify the F-14 CADC as a hybrid analog/digital air-data system. The repository does not have sufficient primary evidence to assert every component, manufacturer detail, internal signal path, or calibration circuit listed in older versions of this document. The following items are therefore treated as historical hypotheses until tied to a specific manual, drawing, or technical report:
 
-- **Pressure transducers:** Converted Pt and Ps to proportional voltage signals.
-- **Operational amplifiers:** Performed analog summation and scaling.
-- **Four-quadrant analog multipliers:** Implemented terms such as M^2.
-- **Function potentiometers:** Hardware lookup behavior for nonlinear mappings.
-- **Exponentiation circuits:** Implemented power-law relations using cascaded analog stages.
+- pressure transducers and signal-conditioning stages;
+- analog computation and function-generation stages;
+- digital processing elements in variants that used them;
+- continuous outputs to aircraft indication and control systems.
 
-The output was continuous analog data feeding wing actuator servos and cockpit indicators, with no software processing stage in the core control path.
+This project models functional relationships, not the original circuit implementation. The claim that a particular output path or component existed must be supported by a variant-specific primary source before it becomes a project requirement.
 
-### Update rate
+### Timing statement
 
-The original hardware operated continuously at effective rates of **50 Hz or higher**, with analog response latency in microseconds rather than milliseconds.
+The current repository does not establish a verified original CADC update rate or latency budget. The simulator uses a caller-selected `dt`; the `50 Hz` value previously stated in this document is removed until supported by a primary source.
 
 ### Computed outputs
 
-The CADC computed and distributed:
+The project models the following candidate air-data outputs:
 
 - **Mach** -> AWG, weapon system references, cockpit Mach indicator
 - **CAS / IAS** -> cockpit airspeed indication and envelope limiting logic
@@ -67,13 +66,15 @@ The CADC computed and distributed:
 - **Outside air temperature (OAT)** -> temperature gauge and fuel-related corrections
 - **Dynamic pressure (q)** -> flight-control gain scheduling
 
-### Redundancy
+### Redundancy and variant differences
 
-The F-14 architecture included partially redundant air data paths. The primary CADC fed most systems, while a secondary and simpler ADC path supported critical cockpit indications.
+Redundancy, backup paths, and variant differences require source-specific verification. They are not implemented by this repository and must not be inferred from the single-path simulator.
 
 ---
 
-## Operating parameters relevant to this simulation
+## Operating parameters currently used by this simulation
+
+The following values are model inputs currently used by the simulator. They are not automatically certified aircraft limits. Each value must be traced to a specific F-14 variant, manual revision, and operating context before being promoted to a software requirement.
 
 ### Reference speeds
 
@@ -107,15 +108,15 @@ The F-14 architecture included partially redundant air data paths. The primary C
 
 ## Differences versus real hardware
 
-This project is an educational simulation. Main differences from the original CADC:
+This project is an educational simulation. Main differences from any original aircraft implementation:
 
 **Implementation:**
 - Real: analog circuitry, hardware function elements, synchro outputs
 - Simulation: 64-bit floating-point equations in standard C
 
 **Accuracy:**
-- Real: approximately 0.5% Mach error and around 100 ft altitude uncertainty
-- Simulation: below 0.001% Mach error and below 1 m altitude error (ideal-model conditions)
+- Aircraft accuracy figures are not claimed without a source-specific calibration document.
+- Simulation: approximately 1e-6 Mach inversion tolerance and sub-meter ideal-model altitude inversion in the tested range; this is numerical model behavior, not aircraft accuracy.
 
 **Temperature model:**
 - Real: TAT probes measure total temperature, CADC applies recovery correction
@@ -139,9 +140,11 @@ This project is an educational simulation. Main differences from the original CA
 
 The project is based on open and historically documented sources:
 
-- **NATOPS Flight Manual F-14A/B/D** - official U.S. Navy flight manuals (declassified versions)
+- [F-14A NATOPS manual catalog record](https://sova.si.edu/record/nasm.2018.0021) - Smithsonian Institution record for a historical F-14A NATOPS manual.
+- [NAVAIR F-14 manual records](https://www.secnav.navy.mil/foia/readingroom/CaseFiles/FOIA%20Logs/DO%20FOIA%20Logs%20FY%202014%20_Redacted.pdf) - Navy FOIA log identifying F-14A, F-14B, and F-14D NATOPS manual identifiers.
 - **Grumman Design Reports** - F-14 technical reports available through DTIC archives
 - **AIAA Journal of Aircraft** - papers from the 1970-1985 period on variable wing control and high-speed aerodynamics
-- **U.S. Standard Atmosphere 1976** - NOAA/NASA/USAF public document
+- [U.S. Standard Atmosphere 1976](https://ntrs.nasa.gov/archive/nasa%20/casi.ntrs.nasa.gov/19770009539.pdf) - NOAA/NASA/USAF public technical document.
+- [FAA AC 20-115D](https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1032046) - software-assurance context for the future refactoring; it is not an F-14 technical source.
 
 Atmospheric physics, pitot relations, and airspeed equations are public-domain aerodynamics fundamentals and can be found in standard university-level references.

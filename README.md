@@ -1,26 +1,37 @@
 # Central Air Data Computer F-14 Tomcat
 
-Language: English | [Español](README.es.md)
+Documentation language: English
 
 I have always loved aviation, especially military aircraft, and the F-14 Tomcat has always been my all-time favorite. After learning more about the history of its digital air data computer and seeing how much technical documentation is now public, I built this project as an educational simulation of the **Central Air Data Computer (CADC)** used by the F-14.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/F-14_Tomcat_DF-SD-06-03497.jpg/1920px-F-14_Tomcat_DF-SD-06-03497.jpg" alt="F-14 Tomcat" width="800"/>
 
-The project reproduces the functional CADC architecture: it takes simulated sensor inputs (pitot pressure, static pressure, and temperature), processes them with physics-based models, and produces aerodynamic parameters used by the cockpit instruments, flight control logic, and variable-sweep wing system.
+The project is an educational, software-only reconstruction of selected CADC functions. It takes simulated sensor inputs (pitot pressure, static pressure, and temperature), processes them with documented aerodynamic models, and produces air-data parameters consumed by the simulated wing-sweep scheduler, alert logic, and telemetry logger. It does not claim to reproduce the original hardware, wiring, calibration data, or certified aircraft interfaces.
 
 ## Documentation
 
-- Architecture: [English](docs/architecture.md) | [Español](docs/architecture.es.md)
-- F-14 technical reference: [English](docs/f14_references.md) | [Español](docs/f14_references.es.md)
-- Implemented physics: [English](docs/physics.md) | [Español](docs/physics.es.md)
+- Architecture: [System architecture](docs/architecture.md)
+- F-14 technical reference: [Technical reference](docs/f14_references.md)
+- Implemented physics: [Implemented physics](docs/physics.md)
+- Development assurance roadmap: [DO-178C-oriented roadmap](docs/development-assurance.md)
 
 ---
 
 ## Historical context
 
-The **F-14 Tomcat** (Grumman, 1970) was one of the earliest naval fighters with computer-controlled variable geometry wings. The CADC made that automation possible: it received pressure and temperature measurements, computed Mach in real time, and sent that information to hydraulic systems that positioned the wings.
+The F-14 used a Central Air Data Computer as part of its air-data and automatic wing-sweep functions. This model uses a 20°–68° in-flight wing-sweep range and a 75° oversweep/storage position as documented model inputs; the exact source revision and variant applicability must be tracked before treating those values as requirements. The exact internal implementation, calibration schedules, signal paths, and configuration differences between F-14 variants are not fully represented here.
 
-The original CADC was a hybrid analog-digital computer. Instead of running modern software, many equations were implemented with analog circuits, operational amplifiers, and physically programmed function components. This project reimplements the same core logic in modern C with 64-bit floating-point precision for educational use.
+The historical CADC is commonly described as a hybrid analog/digital system. This repository does not reproduce that hardware. It reimplements a selected functional model in portable C using IEEE-754 `double` arithmetic for educational and research purposes.
+
+## Project status and refactoring commitment
+
+The current codebase is the legacy Phase 1 educational simulator. The project will be refactored toward a complete, reviewable software product in three phases:
+
+1. **Software baseline:** establish requirements, interfaces, assumptions, deterministic behavior, verification, configuration control, and documented limitations.
+2. **Complete software model:** separate the physical model, air-data algorithms, aircraft/wing dynamics, fault handling, I/O adapters, and test infrastructure; define stable interfaces and machine-checkable verification evidence.
+3. **Virtual hardware and hardware transition:** execute the same functional core behind virtual sensor/actuator interfaces, then evaluate a target implementation such as an embedded processor, FPGA, or hardware-in-the-loop platform.
+
+The refactoring will use DO-178C as a development-assurance reference. It will not claim DO-178C compliance, an assigned Design Assurance Level, airworthiness approval, or certification. DO-178C applies in the context of an aircraft system and its safety assessment; this project is currently a non-airborne research simulator. See [Development assurance and roadmap](docs/development-assurance.md).
 
 ---
 
@@ -259,14 +270,17 @@ M < 0.40          -> sweep = 20 deg
 
 ## Future extensions
 
-Future work may include additional CADC behavior that was not modeled yet due to complexity, more efficient numerical methods for selected routines, and a real-time graphical cockpit panel that moves beyond pure console simulation.
+Future work is governed by the staged refactoring roadmap rather than by ad-hoc feature additions. Candidate capabilities include a closed-loop aircraft model, explicit actuator dynamics, virtual buses, fault injection, a graphical cockpit, and a hardware-in-the-loop adapter.
 
 ---
 
 ## References
 
-- **NATOPS Flight Manual F-14A/B/D** - Grumman/US Navy (declassified)
-- **U.S. Standard Atmosphere 1976** - NOAA/NASA/USAF
+- [FAA AC 20-115D](https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1032046) - FAA guidance recognizing RTCA DO-178C/ED-12C as an acceptable means for airborne software assurance; not a regulation and not a certification of this project.
+- [RTCA DO-178C overview](https://www.rtca.org/do-178/) - scope and relationship of DO-178C to airborne software assurance.
+- [U.S. Standard Atmosphere 1976](https://ntrs.nasa.gov/archive/nasa%20/casi.ntrs.nasa.gov/19770009539.pdf) - NASA/NOAA/USAF technical reference for the standard-atmosphere model.
+- [F-14A NATOPS catalog record](https://sova.si.edu/record/nasm.2018.0021) - Smithsonian catalog record for a historical F-14A NATOPS manual artifact.
+- **F-14 NATOPS and technical manuals** - use variant-specific manuals for any claim about aircraft limits, CADC behavior, or wing-sweep schedules; values in this repository must be treated as model inputs until traced to a specific document and revision.
 - *Introduction to Flight* - John D. Anderson (7th ed.)
 - *Modern Compressible Flow* - John D. Anderson
 - *Avionics Navigation Systems* - Kayton and Fried (2nd ed.)

@@ -1,21 +1,25 @@
 # System architecture
 
-Language: English | [Español](architecture.es.md)
+Documentation language: English
 
 ## Overview
 
-The project is split into six modules with strictly one-way dependencies. Lower-level modules do not depend on higher-level modules.
+The project is split into six modules with mostly one-way dependencies. The logger is an observer of the CADC state; it is not a processing stage above the CADC.
 
 ```
 main.c
-  -> logger.h/.c
-       -> cadc.h/.c
-            -> airdata.h/.c
-                 -> sensors.h/.c
-                      -> atmosphere.h/.c
+  ├── cadc_update()
+  │    ├── sensors_read()
+  │    │    └── atmosphere_calculate()
+  │    ├── airdata_compute()
+  │    ├── wing-sweep scheduler
+  │    └── alert evaluation
+  └── logger_log_cycle()
+       ├── validation and fault diagnosis
+       └── CSV/statistics output
 ```
 
-This hierarchy mirrors the real CADC design approach: low-level subsystems (atmosphere and sensors) remain independent from the high-level integrator.
+This is a software decomposition inspired by the functional role of an air-data computer. It is not a wiring diagram or a claim that the original F-14 CADC used these software modules.
 
 ---
 
@@ -45,7 +49,7 @@ This hierarchy mirrors the real CADC design approach: low-level subsystems (atmo
 
 **Dependencies:** `atmosphere.h`
 
-**Design decision:** Instead of producing arbitrary pressure values, this module takes altitude + Mach over time and derives physically valid pressure and temperature values through ISA-based equations. This guarantees consistency among `Pt`, `Ps`, and `T`.
+**Design decision:** Instead of producing arbitrary pressure values, this module takes altitude + Mach over time and derives a self-consistent synthetic measurement set through ISA-based equations. This is a test-data generator, not a model of the original probe electronics.
 
 **Gaussian noise:** Implemented with Box-Muller using only standard C `rand()`.
 
@@ -61,9 +65,9 @@ This hierarchy mirrors the real CADC design approach: low-level subsystems (atmo
 
 **Dependencies:** `sensors.h`, `atmosphere.h`
 
-**Critical design decision:** Supersonic Mach inversion uses numeric bisection instead of Newton-Raphson. The reason is robustness: bisection cannot diverge even with noisy inputs. Certified avionics software often prioritizes conservative and predictable behavior over speed.
+**Critical design decision:** Supersonic Mach inversion uses numeric bisection instead of Newton-Raphson. The reason is bounded, predictable iteration behavior within a validated bracket. This design choice alone does not make the software compliant with any avionics standard.
 
-**CAS bug fix note:** An earlier version used `qc = Pt - P0`, which incorrectly produced `CAS = 0` at altitude. The corrected relation is `qc = Pt - Ps`, matching the physical instrument definition.
+**CAS note:** The implementation uses `qc = Pt - Ps` as an educational impact-pressure approximation. The code and documentation must not present this as a complete supersonic CAS calibration model.
 
 ---
 
@@ -100,7 +104,7 @@ This hierarchy mirrors the real CADC design approach: low-level subsystems (atmo
 
 **Outputs:** `.csv` file, diagnostics, summary statistics
 
-**Dependencies:** `cadc.h`
+**Dependencies:** `cadc.h`; called by `main.c` after `cadc_update()`
 
 **Two verification levels:**
 
@@ -137,6 +141,6 @@ The logger catches conditions like `CAS > TAS` (physically impossible) that migh
 
 **Pure vs stateful functions:** Calculation functions (`airdata_calc_mach`, `cadc_calc_wing_sweep`) are pure and side-effect free. Stateful functions (`cadc_update`, `logger_log_cycle`) explicitly receive and update state structures. No global mutable state is required.
 
-**Defensive clamping:** All modules clamp inputs before calculations to avoid propagating invalid values (`NaN`, `Inf`) due to noise spikes or programming mistakes.
+**Defensive clamping:** Several modules clamp inputs before calculations, but this is not yet a complete numeric-safety policy. The refactoring roadmap will define explicit range, error, and non-finite-value requirements.
 
 **Headers as contracts:** Each `.h` file defines the full public API. `.c` implementations can evolve internally as long as function signatures and documented behavior remain compatible.
