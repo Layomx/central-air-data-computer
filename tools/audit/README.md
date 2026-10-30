@@ -40,6 +40,7 @@ Outputs: `results.txt` (all `CHECK` lines) and `environment.txt` (tag, commit, c
 - Thresholds are tolerance bands around the documented numbers, not exact equality.
 - The mutant check detects "visible" failures by counting failure words in the test output against an unmodified baseline. It is a heuristic that exists only to show that exit status never reflects a failure.
 - Sanitizers, strict warnings and `-fanalyzer` report no issues on the executed paths. That does not prove absence of defects.
+- LeakSanitizer may be unusable in sandboxed or traced environments. If the output contains `LeakSanitizer does not work under ptrace`, rerun the sanitizer portion with `ASAN_OPTIONS=detect_leaks=0` and record the environment limitation separately; do not classify that message as an application memory defect.
 - `OK-08` covers one machine and toolchain. Cross-platform reproducibility (R-3) and the README claim of macOS and Windows testing are **not** verified here.
 - Not executable and therefore reviewed manually: F-10 monitor placement (logger vs CADC core), F-11 boundary blur (`true_*` fields travelling inside `SensorReading`).
 - The audited numbers were first obtained on Ubuntu 24.04 / GCC 13.3 / glibc 2.39. Results on other toolchains are recorded by running the tool there.

@@ -54,3 +54,39 @@ Priority: P0 blocks verification; P1 correctness or data integrity; P2 consisten
 2. System boundary: air-data algorithms only, or also wing-sweep scheduling and alerts?
 3. Timing requirements: `update_rate_hz` is never used and a comment cites 50 Hz.
 4. Provenance of aircraft limits (777 kt CAS, Mach 2.34, 60000 ft, wing-sweep thresholds): unverified claims until a variant-specific source is cited.
+
+## Audit assessment and Phase 2 entry criteria
+
+This audit is considered adequate as a **Phase 1 reproduction audit**: it demonstrates that the documented legacy findings can be reproduced against the immutable `v1.0.0-phase1` tag. It is not a Phase 2 regression suite and does not demonstrate that any finding has been corrected.
+
+The following items are required before declaring the Phase 1 baseline closed and accepting Phase 2 functional changes:
+
+### Verification infrastructure blockers
+
+- Tests shall return a non-zero exit status when an expected result is not met.
+- Tests shall run non-interactively; no test may wait for `stdin`.
+- The test runner shall fail on compilation, timeout, sanitizer, and test-process errors.
+- The runner shall distinguish an actual sanitizer finding from an environment limitation such as LeakSanitizer being unavailable under `ptrace`.
+- At least one negative test shall prove that each test binary can fail.
+
+### Functional safety and data-integrity blockers
+
+- Every public calculation shall reject or explicitly classify `NaN`, infinity, and out-of-range inputs.
+- Every output structure shall be fully initialized on success and failure paths.
+- `valid` shall imply finite, range-checked, and semantically valid output data.
+- VSI shall use a validity-aware history model and shall not calculate a rate from an invalid previous sample.
+- Static, total, impact, and dynamic pressure shall have separate definitions and fields.
+- Saturation and non-convergence shall be reported rather than silently converted into apparently valid values.
+
+### Architecture decisions required before implementation
+
+- Define whether Phase 2 covers the air-data computer only or also wing scheduling, alerts, and aircraft dynamics.
+- Remove simulation truth (`true_*` fields) from the production CADC boundary; keep it in a simulator-side model or test oracle.
+- Define the sensor temperature model: static temperature, total temperature, or an explicit probe/recovery model.
+- Decide the required behavior at ground/Mach 0 with noisy pressure measurements.
+- Establish one source of truth for physical constants, aircraft limits, and timing parameters.
+- Define the reproducibility policy across supported compilers, C libraries, operating systems, and random-number implementations.
+
+### Recommended Phase 2 closure evidence
+
+Each corrected finding should be closed with a requirement identifier, a code/design reference, a deterministic test, and a recorded result. The historical audit remains unchanged and must continue to reproduce the original findings on `v1.0.0-phase1`; corrected behavior belongs in the Phase 2 test suite.
