@@ -1,0 +1,12 @@
+# Project-wide clangd defaults. The generated compile_commands.json remains the
+# authoritative source for translation-unit-specific flags and include paths.
+CompileFlags:
+  Add:
+    - -std=c11
+  CompilationDatabase: .
+
+Diagnostics:
+  UnusedIncludes: None
+
+Index:
+  Background: Build

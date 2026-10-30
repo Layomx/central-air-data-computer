@@ -26,6 +26,9 @@ all: cadc_f14 test_atmosphere test_sensors test_airdata test_cadc test_logger
 run: cadc_f14
 	./cadc_f14 $(ARGS)
 
+compile_commands:
+	./tools/lsp/generate-compile-commands.sh
+
 test_atmosphere: $(SRC)/atmosphere.c $(TEST)/test_atmosphere.c
 	$(CC) $(CFLAGS_DBG) -I$(SRC) \
 	    $(SRC)/atmosphere.c \
@@ -90,4 +93,4 @@ clean:
 	rm -f output/*.csv
 	@echo "Limpieza completada"
 
-.PHONY: all run tests clean
+.PHONY: all run tests compile_commands clean
