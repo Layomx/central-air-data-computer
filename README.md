@@ -14,6 +14,7 @@ The project is an educational, software-only reconstruction of selected CADC fun
 - F-14 technical reference: [Technical reference](docs/f14_references.md)
 - Implemented physics: [Implemented physics](docs/physics.md)
 - Development assurance roadmap: [DO-178C-oriented roadmap](docs/development-assurance.md)
+- Phase 1 technical audit: [Audit findings](docs/audit-phase1.md)
 
 ---
 
@@ -25,11 +26,12 @@ The historical CADC is commonly described as a hybrid analog/digital system. Thi
 
 ## Project status and refactoring commitment
 
-The current codebase is the legacy Phase 1 educational simulator. The project will be refactored toward a complete, reviewable software product in three phases:
+The original educational simulator (Phase 1) is preserved, unmodified, as release [`v1.0.0-phase1`](https://github.com/Layomx/central-air-data-computer/releases/tag/v1.0.0-phase1) (commit `5751cdb`). `main` now hosts Phase 2. The project proceeds in four phases:
 
-1. **Software baseline:** establish requirements, interfaces, assumptions, deterministic behavior, verification, configuration control, and documented limitations.
-2. **Complete software model:** separate the physical model, air-data algorithms, aircraft/wing dynamics, fault handling, I/O adapters, and test infrastructure; define stable interfaces and machine-checkable verification evidence.
-3. **Virtual hardware and hardware transition:** execute the same functional core behind virtual sensor/actuator interfaces, then evaluate a target implementation such as an embedded processor, FPGA, or hardware-in-the-loop platform.
+1. **Original simulation (complete, frozen):** the legacy educational simulator, kept as a reproducible historical version.
+2. **Refactoring and engineering hardening (current):** requirements and acceptance criteria, interfaces and contracts, executable verification, documented decisions, and a chain of verification evidence.
+3. **Virtual hardware:** a virtual-computer model (components, interfaces, registers, timing where relevant, I/O, observable behavior) that keeps the functional model separate from execution mechanisms and the hardware platform.
+4. **Physical hardware (possible future extension, not planned in detail):** architecture decisions in earlier phases should avoid making it needlessly difficult.
 
 The refactoring will use DO-178C as a development-assurance reference. It will not claim DO-178C compliance, an assigned Design Assurance Level, airworthiness approval, or certification. DO-178C applies in the context of an aircraft system and its safety assessment; this project is currently a non-airborne research simulator. See [Development assurance and roadmap](docs/development-assurance.md).
 
