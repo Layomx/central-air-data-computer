@@ -32,6 +32,7 @@ compile_commands:
 test_atmosphere: $(SRC)/atmosphere.c $(TEST)/test_atmosphere.c
 	$(CC) $(CFLAGS_DBG) -I$(SRC) \
 	    $(SRC)/atmosphere.c \
+	    $(TEST)/test_framework.c \
 	    $(TEST)/test_atmosphere.c \
 	    -o $(TEST)/test_atmosphere $(LDFLAGS)
 	@echo "Compilado: test_atmosphere"
