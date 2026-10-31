@@ -579,9 +579,10 @@ static void test_noise_activation(TestContext *ctx) {
                  reading.temperature_K != reading.true_temperature_K,
              "At least one measured channel should differ from its true value");
 
-  TEST_CHECK_NEAR(ctx, REQ_READING_INVAR, reading.dynamic_pressure_Pa,
-                  reading.total_pressure_Pa - reading.static_pressure_Pa, 1e-9,
-                  "Dynamic pressure must equal measured total minus static pressure");
+  TEST_CHECK_NEAR(
+      ctx, REQ_READING_INVAR, reading.dynamic_pressure_Pa,
+      reading.total_pressure_Pa - reading.static_pressure_Pa, 1e-9,
+      "Dynamic pressure must equal measured total minus static pressure");
 }
 
 /* ------------------------------------------------------------------------- */
@@ -622,9 +623,10 @@ static void test_noise_deactivation(TestContext *ctx) {
                   reading.true_temperature_K, 1e-9,
                   "After noise deactivation, temperature must be noiseless");
 
-  TEST_CHECK_NEAR(ctx, REQ_READING_INVAR, reading.dynamic_pressure_Pa,
-                  reading.total_pressure_Pa - reading.static_pressure_Pa, 1e-9,
-                  "Dynamic pressure must equal measured total minus static pressure");
+  TEST_CHECK_NEAR(
+      ctx, REQ_READING_INVAR, reading.dynamic_pressure_Pa,
+      reading.total_pressure_Pa - reading.static_pressure_Pa, 1e-9,
+      "Dynamic pressure must equal measured total minus static pressure");
 }
 
 /* ------------------------------------------------------------------------- */
