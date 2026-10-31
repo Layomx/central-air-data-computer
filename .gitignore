@@ -7,6 +7,12 @@ tests/test_cadc.exe
 tests/test_logger.exe
 *.exe
 
+# Local clangd compilation database (machine-specific paths)
+compile_commands.json
+
+# Local clangd index/cache
+.cache/
+
 # Objetos
 *.o
 
