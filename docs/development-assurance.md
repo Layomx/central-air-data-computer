@@ -39,6 +39,9 @@ No Design Assurance Level is assigned at this stage. A DAL is a system-level saf
 - Add robustness tests for range limits, discontinuities, invalid data, timing, and numerical convergence.
 - Add traceability from requirement to design, implementation, and verification; add configuration identification and a change history.
 
+The current test-framework decisions, migrated test scope, and F-01 closure
+criteria are recorded in [Phase 2 test assurance record](phase2-test-assurance.md).
+
 ### Phase 3 — Virtual hardware
 
 - Define virtual sensor, actuator, clock, and bus interfaces, registers, and timing where relevant.
