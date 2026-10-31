@@ -37,10 +37,12 @@ test_atmosphere: $(SRC)/atmosphere.c $(TEST)/test_atmosphere.c
 	    -o $(TEST)/test_atmosphere $(LDFLAGS)
 	@echo "Compilado: test_atmosphere"
 
-test_sensors: $(SRC)/atmosphere.c $(SRC)/sensors.c $(TEST)/test_sensors.c
+test_sensors: $(SRC)/atmosphere.c $(SRC)/sensors.c \
+	$(TEST)/test_framework.c $(TEST)/test_framework.h $(TEST)/test_sensors.c
 	$(CC) $(CFLAGS_DBG) -I$(SRC) \
 	    $(SRC)/atmosphere.c \
 	    $(SRC)/sensors.c \
+	    $(TEST)/test_framework.c \
 	    $(TEST)/test_sensors.c \
 	    -o $(TEST)/test_sensors $(LDFLAGS)
 	@echo "Compilado: test_sensors"
